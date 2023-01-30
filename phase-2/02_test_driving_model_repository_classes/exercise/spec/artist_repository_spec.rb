@@ -1,7 +1,7 @@
 require_relative "../lib/artist_repository"
 
 def reset_artists_table
-  seed_sql = File.read("spec/seeds_artist.sql")
+  seed_sql = File.read("spec/seeds_artists.sql")
   connection = PG.connect({ host: "localhost", dbname: "music_library_test" })
   connection.exec(seed_sql)
 end
@@ -11,7 +11,7 @@ describe ArtistRepository do
     reset_artists_table
   end
 
-  it "returns a list of artists" do
+  it "returns all artists" do
     repo = ArtistRepository.new
 
     artists = repo.all
