@@ -19,6 +19,8 @@ class AlbumRepository
 
     result_set = DatabaseConnection.exec_params(query, [id])
 
-    Album.new(result_set.first)
+    record = result_set.first
+
+    Album.new(record)
   end
 end
