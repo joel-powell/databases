@@ -103,20 +103,16 @@ class AlbumRepository
 
   def create(album)
     # Executes the SQL query:
+    # INSERT INTO albums (title, release_year, artist_id) VALUES ($1,$2,$3);
 
-    # INSERT INTO albums (title, release_year, artist_id)
-    # VALUES ($1,$2,$3);
-
-    # Returns created object
+    # Returns nil
   end
 
-  def delete(album)
+  def delete(id)
     # Executes the SQL query:
+    # DELETE FROM albums WHERE id = $1;
 
-    # DELETE FROM albums
-    # WHERE id = $1;
-
-    # Returns ?
+    # Returns nil
   end
 end
 ```

@@ -17,9 +17,9 @@ describe AlbumRepository do
     albums = repo.all
 
     expect(albums.length).to eq(3)
-    expect(albums.first.id).to eq("1")
+    expect(albums.first.id).to eq(1)
     expect(albums.first.title).to eq("Doolittle")
-    expect(albums.first.release_year).to eq("1989")
+    expect(albums.first.release_year).to eq(1989)
   end
 
   it "returns an album by id" do
@@ -27,8 +27,15 @@ describe AlbumRepository do
 
     album = repo.find(2)
 
-    expect(album.id).to eq("2")
+    expect(album.id).to eq(2)
     expect(album.title).to eq("Surfer Rosa")
-    expect(album.release_year).to eq("1988")
+    expect(album.release_year).to eq(1988)
+  end
+
+  it "creates a new album" do
+    repo = AlbumRepository.new
+    new_album = Album.new(title: "Trompe le Monde", release_year: 1991, artist_id: 1)
+    repo.create(new_album)
+    expect(repo.all).to include(have_attributes(new_album.to_h.except(:id)))
   end
 end
