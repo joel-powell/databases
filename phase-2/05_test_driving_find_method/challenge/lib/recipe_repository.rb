@@ -17,6 +17,7 @@ class RecipeRepository
     params = [id]
     result_set = DatabaseConnection.exec_params(query, params)
     record = result_set.first
-    Recipe.new(record)
+    # Recipe.new(record)
+    Struct.new(*record.keys.map(&:to_sym), keyword_init: true).new(record)
   end
 end

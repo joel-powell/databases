@@ -1,4 +1,4 @@
-# Single Table Design Recipe Template
+# Single Table Design Recipe
 
 ## 1. Extract nouns from the user stories or specification
 
