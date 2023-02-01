@@ -17,7 +17,7 @@ describe ArtistRepository do
     artists = repo.all
 
     expect(artists.length).to eq(2)
-    expect(artists.first.id).to eq("1")
+    expect(artists.first.id).to eq(1)
     expect(artists.first.name).to eq("Pixies")
     expect(artists.first.genre).to eq("Rock")
   end

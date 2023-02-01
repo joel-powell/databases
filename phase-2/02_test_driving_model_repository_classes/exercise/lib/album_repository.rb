@@ -1,13 +1,14 @@
 require_relative "album"
+require_relative "format"
 
 class AlbumRepository
+  include Format
+
   def all
     query = <<~SQL
       SELECT * FROM albums;
     SQL
-
     result_set = DatabaseConnection.exec_params(query, [])
-
     result_set.map { Album.new(hash_values_to_integers(_1)) }
   end
 
@@ -16,11 +17,8 @@ class AlbumRepository
       SELECT * FROM albums
       WHERE id = $1;
     SQL
-
     result_set = DatabaseConnection.exec_params(query, [id])
-
     record = result_set.first
-
     Album.new(hash_values_to_integers(record))
   end
 
@@ -29,15 +27,7 @@ class AlbumRepository
       INSERT INTO albums (title, release_year, artist_id)
       VALUES ($1,$2,$3);
     SQL
-
     params = [album.title, album.release_year, album.artist_id]
-
     DatabaseConnection.exec_params(query, params)
-  end
-
-  private
-
-  def hash_values_to_integers(hash)
-    hash.transform_values { |value| Integer(value, exception: false) || value }
   end
 end

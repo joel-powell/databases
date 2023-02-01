@@ -1,23 +1,46 @@
 require_relative "lib/database_connection"
-require_relative "lib/artist_repository"
 require_relative "lib/album_repository"
+require_relative "lib/artist_repository"
 
-# We need to give the database name to the method `connect`.
-DatabaseConnection.connect("music_library")
+class Application
+  def initialize(database_name, io, album_repository, artist_repository)
+    DatabaseConnection.connect(database_name)
+    @io = io
+    @album_repository = album_repository
+    @artist_repository = artist_repository
+  end
 
-artist_repository = ArtistRepository.new
-album_repository = AlbumRepository.new
+  def run
+    @io.puts <<~INTRO
+      Welcome to the music library manager!
 
-puts "--ALL ARTISTS--"
-artist_repository.all.each do |artist|
-  puts "#{artist.id} - #{artist.name} - #{artist.genre}"
+      What would you like to do?
+       1 - List all albums
+       2 - List all artists
+
+    INTRO
+    @io.print "Enter your choice: "
+    input = @io.gets.chomp.to_i
+
+    selected = %w[albums artists][input - 1]
+
+    @io.puts "Here is the list of #{selected}:"
+
+    case input
+    when 1
+      @io.puts @album_repository.all.map { |album| "* #{album.id} - #{album.title}" }.join("\n")
+    when 2
+      @io.puts @artist_repository.all.map { |artist| "* #{artist.id} - #{artist.name}" }.join("\n")
+    end
+  end
 end
 
-puts "--ALL ALBUMS--"
-album_repository.all.each do |album|
-  puts "#{album.id} - #{album.title} - #{album.release_year} - #{album.artist_id}"
+if __FILE__ == $PROGRAM_NAME
+  app = Application.new(
+    "music_library",
+    Kernel,
+    AlbumRepository.new,
+    ArtistRepository.new
+  )
+  app.run
 end
-
-puts "--ALBUM 3--"
-album = album_repository.find(3)
-puts "#{album.id} - #{album.title} - #{album.release_year} - #{album.artist_id}"
